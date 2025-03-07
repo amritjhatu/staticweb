@@ -1,0 +1,29 @@
+@page "/students/school/{school}"
+@inject HttpClient Http
+
+<h3>Students in @school</h3>
+
+<ul>
+    @foreach (var student in students)
+    {
+        <li>@student.Name</li>
+    }
+</ul>
+
+@code {
+    [Parameter]
+    public string school { get; set; }
+
+    private List<Student> students = new List<Student>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        students = await Http.GetFromJsonAsync<List<Student>>($"/api/students/school/{school}");
+    }
+
+    public class Student
+    {
+        public string Name { get; set; }
+        public string School { get; set; }
+    }
+}

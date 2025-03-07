@@ -1,0 +1,26 @@
+@page "/students/count-by-school"
+@inject HttpClient Http
+
+<h3>Student Count by School</h3>
+
+<ul>
+    @foreach (var report in studentCounts)
+    {
+        <li>@report.School: @report.Count</li>
+    }
+</ul>
+
+@code {
+    private List<StudentCount> studentCounts = new List<StudentCount>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        studentCounts = await Http.GetFromJsonAsync<List<StudentCount>>("/api/students/count-by-school");
+    }
+
+    public class StudentCount
+    {
+        public string School { get; set; }
+        public int Count { get; set; }
+    }
+}
